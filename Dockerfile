@@ -55,6 +55,11 @@ RUN apt update && apt install -y \
     libicu-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php --install-dir=/usr/bin --filename=composer && php -r "unlink('composer-setup.php');"
+
+RUN composer global require "fxp/composer-asset-plugin:^1.4.4" --prefer-dist
+RUN composer global require "hirak/prestissimo:^0.3.8" --prefer-dist
+
 RUN locale-gen ru_RU.UTF-8 && \
     update-locale LANG=ru_RU.UTF-8 && \
     echo "LANGUAGE=ru_RU.UTF-8" >> /etc/default/locale && \
