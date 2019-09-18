@@ -26,6 +26,8 @@ RUN apt update && apt install -y \
     libicu63 \
     libicu-dev \
     zip \
+    libzip4 \
+    libzip-dev \
     libgmp-dev \
     && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/ \
     && docker-php-ext-configure gmp \
