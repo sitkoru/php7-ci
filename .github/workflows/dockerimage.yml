@@ -13,7 +13,7 @@ jobs:
       run: docker build . --file Dockerfile --tag sitkoru/php7-ci:$GITHUB_SHA
     - name: Tag as latest
       if: github.ref == 'refs/heads/master'
-      run: docker tag sitkoru/php7-ci:$GITHUB_SHA sitkoru/php7-ci:latests
+      run: docker tag sitkoru/php7-ci:$GITHUB_SHA sitkoru/php7-ci:latest
     - name: Docker login
       run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
     - name: Docker push tag
