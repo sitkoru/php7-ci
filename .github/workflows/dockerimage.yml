@@ -12,3 +12,13 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag sitkoru/php7-ci:$(date +%s)
+    - name: Tag as latest
+      if: github.ref == 'master'
+      run: docker tag sitkoru/php7-ci:$(date +%s) sitkoru/php7-ci:latests
+    - name: Docker login
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+    - name: Docker push tag
+      run: docker push sitkoru/php7-ci:$(date +%s)
+    - name: Docker push latest
+      if: github.ref == 'master'
+      run: docker push sitkoru/php7-ci:latest
