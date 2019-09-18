@@ -7,18 +7,19 @@ jobs:
   build:
  
     runs-on: ubuntu-latest
- 
+    env:
+      IMAGE_TAG: ${{ date +%s }}
     steps:
     - uses: actions/checkout@v1
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag sitkoru/php7-ci:$(date +%s)
+      run: docker build . --file Dockerfile --tag sitkoru/php7-ci:$IMAGE_TAG
     - name: Tag as latest
       if: github.ref == 'refs/heads/master'
-      run: docker tag sitkoru/php7-ci:$(date +%s) sitkoru/php7-ci:latests
+      run: docker tag sitkoru/php7-ci:$IMAGE_TAG sitkoru/php7-ci:latests
     - name: Docker login
       run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
     - name: Docker push tag
-      run: docker push sitkoru/php7-ci:$(date +%s)
+      run: docker push sitkoru/php7-ci:$IMAGE_TAG
     - name: Docker push latest
       if: github.ref == 'refs/heads/master'
       run: docker push sitkoru/php7-ci:latest
