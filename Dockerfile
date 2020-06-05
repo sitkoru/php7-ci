@@ -33,7 +33,7 @@ RUN apt update && apt install -y \
     && docker-php-ext-configure gmp \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install pdo_pgsql pgsql intl soap zip xsl opcache pcntl gd bcmath pdo_mysql mysqli gmp \
-    && pecl install redis-4.3.0 \
+    && pecl install redis \
     && docker-php-ext-enable redis \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
@@ -57,8 +57,8 @@ RUN apt update && apt install -y \
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php --install-dir=/usr/bin --filename=composer && php -r "unlink('composer-setup.php');"
 
-RUN composer global require "fxp/composer-asset-plugin:^1.4.4" --prefer-dist
-RUN composer global require "hirak/prestissimo:^0.3.8" --prefer-dist
+RUN composer global require "fxp/composer-asset-plugin" --prefer-dist
+RUN composer global require "hirak/prestissimo" --prefer-dist
 
 RUN locale-gen ru_RU.UTF-8 && \
     update-locale LANG=ru_RU.UTF-8 && \
