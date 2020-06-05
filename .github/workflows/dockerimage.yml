@@ -1,27 +1,20 @@
 name: Docker Image CI
 
-on: [push]
+on:
+  push:
+    branches: [master]
 
 jobs:
-
   build:
- 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Generate build number
-      uses: einaregilsson/build-number@v1 
-      with:
-        token: ${{secrets.github_token}}
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag docker.pkg.github.com/sitkoru/php7-ci/php7-ci:ci-$BUILD_NUMBER
-    - name: Tag as latest
-      if: github.ref == 'refs/heads/master'
-      run: docker tag docker.pkg.github.com/sitkoru/php7-ci/php7-ci:ci-$BUILD_NUMBER docker.pkg.github.com/sitkoru/php7-ci/php7-ci:latest
-    - name: Docker login
-      run: docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-    - name: Docker push tag
-      run: docker push docker.pkg.github.com/sitkoru/php7-ci/php7-ci:ci-$BUILD_NUMBER
-    - name: Docker push latest
-      if: github.ref == 'refs/heads/master'
-      run: docker push docker.pkg.github.com/sitkoru/php7-ci/php7-ci:latest
+      - uses: actions/checkout@v2
+      - name: Publish to Registry
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: sitkoru/php7-ci/php7-ci
+          tag_with_ref: true
+          tags: latest, ci-$BUILD_NUMBER
